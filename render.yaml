@@ -1,0 +1,46 @@
+# =============================================
+# Render Blueprint: microservicio notifier (Docker)
+# Render > New > Blueprint > seleccionar este repositorio
+# =============================================
+services:
+  - type: web
+    name: wallet-notification-service
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # Email: en Render free el SMTP está bloqueado, se usa la API HTTP de Brevo.
+      - key: EMAIL_PROVIDER
+        value: brevo
+      - key: EMAIL_FROM_ADDRESS
+        sync: false
+      - key: EMAIL_FROM_NAME
+        value: Wallet Notification Service
+      - key: BREVO_API_KEY
+        sync: false
+
+      # Kafka (Aiven). Render pide los valores `sync: false` al crear el Blueprint.
+      - key: KAFKA_ENABLED
+        value: "true"
+      - key: KAFKA_BROKERS
+        sync: false
+      - key: KAFKA_GROUP_ID
+        value: wallet-notifier
+      - key: KAFKA_TOPIC_USER_EVENTS
+        value: user-events
+      - key: KAFKA_TOPIC_ACCOUNT_EVENTS
+        value: account-events
+      - key: KAFKA_SSL
+        value: "true"
+      - key: KAFKA_SSL_CA
+        sync: false
+      - key: KAFKA_SSL_CERT
+        sync: false
+      - key: KAFKA_SSL_KEY
+        sync: false
+      # Si en Aiven usas SASL en lugar de certificado de cliente, agrega en el
+      # panel de Render: KAFKA_SASL_MECHANISM, KAFKA_USERNAME y KAFKA_PASSWORD.

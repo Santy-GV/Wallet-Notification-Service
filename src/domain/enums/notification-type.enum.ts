@@ -1,0 +1,5 @@
+export enum NotificationType {
+  USER_CREATED = 'USER_CREATED',
+  USER_UPDATED = 'USER_UPDATED',
+  ACCOUNT_CREATED = 'ACCOUNT_CREATED',
+}
